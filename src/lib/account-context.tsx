@@ -68,7 +68,6 @@ export const AccountProvider = ({ children }: { children: ReactNode }) => {
     };
 
     fetchUser().then((response) => {
-      console.log(response);
       setUser(response);
       setToken(localToken);
     });
