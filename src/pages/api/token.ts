@@ -1,4 +1,4 @@
-import admin from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const createAuthToken = async (email: string, password: string) => {
@@ -28,7 +28,7 @@ const create = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(error.code).json({ message: error.message });
   }
 
-  const user = await admin.auth().getUser(token.localId);
+  const user = await auth.getUser(token.localId);
 
   return res.status(200).json({
     user: { id: user.uid, name: user.displayName, email: user.email },
