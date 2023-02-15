@@ -1,5 +1,6 @@
 import { auth } from "@/lib/firebase";
 import { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
 const createAuthToken = async (email: string, password: string) => {
   const data = { email, password };
@@ -20,7 +21,17 @@ const createAuthToken = async (email: string, password: string) => {
 };
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { email, password } = req.body;
+  const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(8),
+  });
+
+  const validation = schema.safeParse(req.body);
+  if (!validation.success) {
+    return res.status(400).json({});
+  }
+
+  const { email, password } = validation.data;
 
   const token = await createAuthToken(email, password);
   if (token.error) {

@@ -1,10 +1,20 @@
 import { firestore } from "@/lib/firebase";
 import { User } from "@/lib/user.type";
 import { NextApiRequest, NextApiResponse } from "next";
+import { z } from "zod";
 
 const create = async (req: NextApiRequest, res: NextApiResponse) => {
+  const schema = z.object({
+    content: z.string(),
+  });
+
+  const validation = schema.safeParse(req.body);
+  if (!validation.success) {
+    return res.status(400).json({});
+  }
+
+  const { content } = validation.data;
   const user = JSON.parse(req.cookies.user!) as User;
-  const { content } = req.body;
 
   const post = await firestore
     .collection("feed")
