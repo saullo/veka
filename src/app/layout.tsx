@@ -1,5 +1,6 @@
 import "./globals.css";
 import { AccountProvider } from "../lib/account-context";
+import { AnalyticsWrapper } from "./components/analytics";
 
 export default function RootLayout({
   children,
@@ -15,6 +16,7 @@ export default function RootLayout({
       <head />
       <body className="h-full">
         <AccountProvider>{children}</AccountProvider>
+        <AnalyticsWrapper />
       </body>
     </html>
   );
